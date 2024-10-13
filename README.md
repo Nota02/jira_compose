@@ -1,7 +1,9 @@
 Crack of jira in docker
 
 1)Edit volumes in docker compose file
+
 2)Change port and hostname in dockerbuild file 
+
 3)When you see the license page use this code 
 
 ```
