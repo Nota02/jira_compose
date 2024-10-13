@@ -1,0 +1,7 @@
+FROM atlassian/jira-software:8.19.0-EAP01-ubuntu-jdk11
+COPY server.xml /opt/atlassian/etc/server.xml.j2
+RUN chmod +x /opt/atlassian/jira/bin/setenv.sh
+RUN rm -f /opt/atlassian/jira/atlassian-jira/WEB-INF/lib/atlassian-extras-3.4.6.jar
+COPY atlassian-extras-3.4.6.jar /opt/atlassian/jira/atlassian-jira/WEB-INF/lib/atlassian-extras-3.4.6.jar
+RUN sed -i "s|proxyName=\".*\"|proxyName=\"CHANGE THIS\"|g" /opt/atlassian/etc/server.xml.j2
+RUN sed -i "s|proxyPort=\".*\"|proxyPort=\"CHANGE THIS\"|g" /opt/atlassian/etc/server.xml.j2

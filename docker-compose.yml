@@ -1,0 +1,44 @@
+services:
+  jira:
+    depends_on:
+      - postgresql
+    build:
+      context: ./jirabuild
+    restart: always
+    networks:
+      - jiranet
+    volumes:
+      - /mnt/srv/jira/jiradata:/var/atlassian/jira
+    ports:
+      - '7070:8080'
+    logging:
+      # limit logs retained on host to 25MB
+      driver: "json-file"
+      options:
+        max-size: "500k"
+        max-file: "50"
+    deploy:
+      resources:
+        limits:
+          memory: 4g  # Ограничение на 4 ГБ памяти
+        reservations:
+          memory: 2g  # Резервируем 2 ГБ памяти
+  postgresql:
+    image: postgres:10.23-alpine
+    networks:
+      - jiranet
+    restart: always
+    volumes:
+      - /mnt/srv/jira/jiradb:/var/lib/postgresql/data
+    env_file:
+      - .env
+    logging:
+      # limit logs retained on host to 25MB
+      driver: "json-file"
+      options:
+        max-size: "500k"
+        max-file: "50"
+
+networks:
+  jiranet:
+    driver: bridge
